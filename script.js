@@ -66,15 +66,15 @@
         document.getElementById('popup-tidak').addEventListener('click', () => {
             overlay.classList.add('hidden');
             audio.muted = true;
+            audio.play().catch(() => {});
             isMuted = true;
             muteBtn.textContent = '🔇';
             if (!confettiFired) startConfetti();
         });
     }
 
-    // Show popup after tiny delay
     window.addEventListener('load', () => {
-        audio.muted = true; // start muted; popup decides
+        audio.muted = true;
         audio.play().catch(() => {});
         setTimeout(buildPopup, 600);
     });
@@ -85,6 +85,7 @@
     muteBtn.addEventListener('click', () => {
         isMuted = !isMuted;
         audio.muted = isMuted;
+        audio.play().catch(() => {});
         muteBtn.textContent = isMuted ? '🔇' : '🎵';
     });
 
