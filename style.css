@@ -454,6 +454,63 @@ section {
     pointer-events: none;
 }
 
+.etc {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 4rem;
+    position: relative;
+}
+
+.etc::before {
+    content: '···';
+    position: absolute;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: 0.5rem;
+    color: rgba(184, 160, 216, 0.3);
+}
+
+.tambahan {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(232, 223, 245, 0.65);
+    line-height: 2;
+    text-align: center;
+    max-width: 680px;
+    position: relative;
+}
+
+.tambahan::before {
+    content: '"';
+    display: block;
+    font-family: var(--font-script);
+    font-size: 6rem;
+    color: rgba(184, 160, 216, 0.12);
+    line-height: 0.6;
+    margin-bottom: 1rem;
+    pointer-events: none;
+}
+
+.tambahan::after {
+    content: '"';
+    display: block;
+    font-family: var(--font-script);
+    font-size: 6rem;
+    color: rgba(184, 160, 216, 0.12);
+    line-height: 0.4;
+    margin-top: 0.5rem;
+    pointer-events: none;
+}
+
 /* Gallery dots */
 .galeri-dots {
     display: flex;
@@ -687,6 +744,21 @@ section::before {
     }
 
     .keterangan::before { display: none; }
+
+    .etc {
+        padding: 3rem 1.75rem 1.5rem;
+        align-items: center;
+    }
+
+    .tambahan {
+        font-size: clamp(0.85rem, 3.8vw, 1.1rem);
+        line-height: 1.85;
+    }
+
+    .tambahan::before,
+    .tambahan::after {
+        font-size: 4rem;
+    }
 
     .mute {
         top: 0.85rem;
