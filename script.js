@@ -25,18 +25,18 @@
     const audio       = document.getElementById('musik');
     const muteBtn     = document.getElementById('btn');
     const galeriEl    = document.querySelector('.galeri');
-    const fotoEls     = document.querySelectorAll('.foto');
+    const slideEls    = galeriEl ? Array.from(galeriEl.querySelectorAll('.foto, .etc')) : [];
     const snapContainer = document.getElementById('snap-container');
 
     // ─── State ──────────────────────────────────────────────
     let isMuted       = false;
     let confettiFired = false;
+    let audioStarted  = false;
 
     // ====================================================
     // 1. AUDIO POP-UP
     // ====================================================
     function buildPopup() {
-        // Overlay
         const overlay = document.createElement('div');
         overlay.className = 'popup-overlay';
         overlay.id = 'audio-popup';
@@ -58,6 +58,7 @@
             overlay.classList.add('hidden');
             audio.muted = false;
             audio.play().catch(() => {});
+            audioStarted = true;
             isMuted = false;
             muteBtn.textContent = '🎵';
             if (!confettiFired) startConfetti();
@@ -65,8 +66,7 @@
 
         document.getElementById('popup-tidak').addEventListener('click', () => {
             overlay.classList.add('hidden');
-            audio.muted = true;
-            audio.play().catch(() => {});
+            audioStarted = false;
             isMuted = true;
             muteBtn.textContent = '🔇';
             if (!confettiFired) startConfetti();
@@ -74,8 +74,6 @@
     }
 
     window.addEventListener('load', () => {
-        audio.muted = true;
-        audio.play().catch(() => {});
         setTimeout(buildPopup, 600);
     });
 
@@ -83,10 +81,17 @@
     // 2. MUTE TOGGLE BUTTON
     // ====================================================
     muteBtn.addEventListener('click', () => {
-        isMuted = !isMuted;
-        audio.muted = isMuted;
-        audio.play().catch(() => {});
-        muteBtn.textContent = isMuted ? '🔇' : '🎵';
+        if (!audioStarted) {
+            audio.muted = false;
+            audio.play().catch(() => {});
+            audioStarted = true;
+            isMuted = false;
+            muteBtn.textContent = '🎵';
+        } else {
+            isMuted = !isMuted;
+            audio.muted = isMuted;
+            muteBtn.textContent = isMuted ? '🔇' : '🎵';
+        }
     });
 
     // ====================================================
@@ -226,8 +231,8 @@
     //    This avoids ALL wheel/touch event conflicts with the
     //    vertical snap container.
     // ====================================================
-    if (galeriEl && fotoEls.length) {
-        const slides = Array.from(fotoEls); // real slides only
+    if (galeriEl && slideEls.length) {
+        const slides = slideEls;
         const total  = slides.length;
         let current  = 0;         // 0-based real slide index
         let offsetPx = 0;         // live drag offset in px
@@ -360,11 +365,11 @@
     // 6. GALLERY DOTS
     // ====================================================
     function buildGaleriDots() {
-        if (!fotoEls.length || !galeriEl) return;
+        if (!slideEls.length || !galeriEl) return;
 
         const dotsContainer = document.createElement('div');
         dotsContainer.className = 'galeri-dots';
-        const total = fotoEls.length;
+        const total = slideEls.length;
 
         for (let i = 0; i < total; i++) {
             const dot = document.createElement('span');
